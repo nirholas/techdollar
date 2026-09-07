@@ -1,0 +1,23 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+test = "test"
+script = "script"
+solc_version = "0.8.28"
+optimizer = true
+optimizer_runs = 1000
+via_ir = true
+
+[fmt]
+line_length = 120
+
+[lint]
+# Time is load-bearing in this protocol: stability fees compound per second, auctions decay per
+# second, and a halt is measured in wall-clock time. Robinhood Chain is an Orbit rollup with a
+# single sequencer, so there is no validator to shop timestamps, and every window here is minutes
+# or longer.
+exclude_lints = ["block-timestamp"]
+
+[rpc_endpoints]
+robinhood = "${RHC_RPC_URL}"
