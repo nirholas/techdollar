@@ -107,7 +107,7 @@ contract LiquidationTest is Base {
         auction.take(id, 100e18, auction.price(id), address(this));
 
         // 20% of a 13% penalty on 9,000 to the flagger, 1% of the debt to the keeper.
-        assertApproxEqRel(techd.balanceOf(watcher), (((9_000e18 * 1_300) / BPS) * 2_000) / BPS, 0.001e18);
+        assertApproxEqRel(techd.balanceOf(watcher), (9_000e18 * 1_300 * 2_000) / (BPS * BPS), 0.001e18);
         assertApproxEqRel(techd.balanceOf(keeper), (9_000e18 * 100) / BPS, 0.001e18);
     }
 

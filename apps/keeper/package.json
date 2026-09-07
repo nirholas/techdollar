@@ -1,0 +1,16 @@
+{
+  "name": "@techdollar/keeper",
+  "version": "0.1.0",
+  "description": "Watches TECHDOLLAR positions and auctions: flags what is unsafe, liquidates what it can, bids what pays",
+  "license": "MIT",
+  "type": "module",
+  "bin": { "techdollar-keeper": "./dist/index.js" },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "tsx src/index.ts",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": { "@techdollar/sdk": "workspace:*", "viem": "^2.21.0" },
+  "devDependencies": { "@types/node": "^22.0.0", "tsx": "^4.19.0", "typescript": "^5.6.0", "vitest": "^2.1.0" }
+}
