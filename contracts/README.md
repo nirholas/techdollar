@@ -26,7 +26,7 @@ RHC_RPC_URL=https://rpc.mainnet.chain.robinhood.com forge test   # plus the fork
 | `Halt.t.sol` | Every row of the halt table in `docs/halts.md` |
 | `Peg.t.sol` | The six-to-eighteen decimals boundary, fee accounting, and that the module is always fully reserved |
 | `Savings.t.sol` | That the savings rate is never paid out of thin air, and that a lean period is paid out of a fat one |
-| `Fork.t.sol` | The live NVDA token, its halt surface, and a full borrow and repay at the real pool price |
+| `Fork.t.sol` | The live NVDA token, its halt surface, a full borrow and repay at the real pool price, and a complete liquidation: real seizure, real auction, real shares back to the borrower |
 
 ## Two things to know before editing
 

@@ -140,6 +140,61 @@ contract ForkTest is Test {
         engine.mint(NVDA, 500e18, borrower);
     }
 
+    function test_a_full_liquidation_runs_against_the_real_token() public onFork {
+        uint256 usd1e8 = _poolPriceUsd1e8();
+        _deployProtocol(usd1e8);
+
+        // A borrower at the limit, and a bidder who funds a bid the only way that needs no other
+        // counterparty: by opening a vault of their own.
+        address bidder = makeAddr("bidder");
+        deal(NVDA, borrower, 10e18);
+        deal(NVDA, bidder, 100e18);
+
+        vm.startPrank(borrower);
+        IERC20Meta(NVDA).approve(address(engine), type(uint256).max);
+        engine.deposit(NVDA, 10e18, borrower);
+        engine.mint(NVDA, engine.maxMintable(NVDA, borrower), borrower);
+        vm.stopPrank();
+
+        vm.startPrank(bidder);
+        IERC20Meta(NVDA).approve(address(engine), type(uint256).max);
+        engine.deposit(NVDA, 100e18, bidder);
+        engine.mint(NVDA, engine.maxMintable(NVDA, bidder), bidder);
+        techd.approve(address(auction), type(uint256).max);
+        vm.stopPrank();
+
+        // NVDA falls 25%. The borrower was at the limit, so this puts them under it.
+        oracle.setPrice(NVDA, (usd1e8 * 75) / 100, 18);
+        (,,,,, bool safe,,) = engine.inspect(NVDA, borrower);
+        assertFalse(safe, "the position should be liquidatable");
+
+        uint256 debt = engine.debtOf(NVDA, borrower);
+        vm.prank(keeperAddress());
+        uint256 id = engine.liquidate(NVDA, borrower);
+
+        // The seizure moved real NVDA into the auction. This is the step a mock cannot prove:
+        // Robinhood's token, its transfer semantics, its 18 decimals.
+        assertEq(IERC20Meta(NVDA).balanceOf(address(auction)), 10e18, "the lot is real collateral");
+        assertEq(engine.badDebt(), debt, "the dollars stay outstanding until the auction burns them");
+
+        // Let the price decay until it is worth taking, then buy the lot.
+        skip(1_200);
+        uint256 price = auction.price(id);
+        vm.prank(bidder);
+        auction.take(id, 10e18, price, bidder);
+
+        uint256 bought = IERC20Meta(NVDA).balanceOf(bidder);
+        uint256 returned = IERC20Meta(NVDA).balanceOf(borrower);
+        assertGt(bought, 0, "the bidder received real shares");
+        assertEq(bought + returned, 10e18, "every share is accounted for");
+        assertEq(engine.badDebt(), 0, "the debt is retired");
+        assertGt(engine.surplus(), 0, "and the penalty is the system's");
+    }
+
+    function keeperAddress() internal returns (address) {
+        return makeAddr("keeper");
+    }
+
     function _deployProtocol(uint256 usd1e8) internal {
         oracle = new MockPriceSource();
         oracle.setPrice(NVDA, usd1e8, 18);

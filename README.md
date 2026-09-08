@@ -40,7 +40,7 @@ Every row of it is a test.
 ## What is in here
 
 ```
-contracts/          Foundry. Six contracts, 50 tests, three of them against live Robinhood Chain
+contracts/          Foundry. Six contracts, 51 tests, four of them against live Robinhood Chain
   src/VaultEngine.sol          the CDP: ratios, ceilings, per-second fees, flagging, liquidation
   src/LiquidationAuction.sol   a falling-price auction that burns the dollars it raises
   src/PegStabilityModule.sol   USDG in and out, one for one, so the peg is arbitrageable on day one
@@ -56,14 +56,17 @@ docs/               architecture, halts, risk parameters, operating
 ```bash
 pnpm install
 cd contracts && forge test                                  # 47 local tests
-RHC_RPC_URL=https://rpc.mainnet.chain.robinhood.com forge test   # plus 3 against the live chain
+RHC_RPC_URL=https://rpc.mainnet.chain.robinhood.com forge test   # plus 4 against the live chain
 cd .. && pnpm abis && pnpm -r build && pnpm -r test
 ```
 
-The fork tests are the ones worth reading: they check that the deployed NVDA token still looks the
-way this protocol assumes (18 decimals, a `uiMultiplier` of 1e18, a readable halt surface) and run a
-full borrow and repay against it at the real pool price. If Robinhood upgrades the beacon behind all
-254 equities, those go red.
+The fork tests are the ones worth reading. They check that the deployed NVDA token still looks the
+way this protocol assumes (18 decimals, a `uiMultiplier` of 1e18, a readable halt surface), run a
+full borrow and repay against it at the real pool price, and run a **complete liquidation**: a real
+seizure moving real NVDA into the auction, a bidder taking it as the price decays, and the leftover
+shares going back to the borrower. Mocks cannot prove that path, because the thing being proved is
+the token's own transfer behaviour. If Robinhood upgrades the beacon behind all 254 equities, these
+go red.
 
 ## Design decisions worth arguing with
 
