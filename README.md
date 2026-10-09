@@ -96,3 +96,7 @@ and halt-aware lending this depends on), [Quiver](https://github.com/nirholas/qu
 swaps), [Loxley](https://github.com/nirholas/loxley) (x402 payments).
 
 MIT.
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=nirholas/techdollar&type=Date)](https://www.star-history.com/#nirholas/techdollar&Date)
