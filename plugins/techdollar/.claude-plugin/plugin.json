@@ -6,6 +6,8 @@
     "name": "nirholas"
   },
   "repository": "https://github.com/nirholas/techdollar",
+  "homepage": "https://github.com/nirholas/techdollar",
+  "license": "Apache-2.0",
   "keywords": [
     "techdollar",
     "cdp",

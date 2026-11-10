@@ -7,8 +7,9 @@
   "plugins": [
     {
       "name": "techdollar",
-      "source": "./",
+      "source": "./plugins/techdollar",
       "description": "SDK and report-only keeper for TECHDOLLAR positions, halts and liquidation auctions on Robinhood Chain.",
+      "category": "development",
       "tags": [
         "cdp",
         "robinhood-chain",
