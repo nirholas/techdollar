@@ -1,0 +1,16 @@
+{
+  "name": "techdollar",
+  "version": "0.1.0",
+  "description": "SDK and report-only keeper for TECHDOLLAR positions, halts and liquidation auctions on Robinhood Chain.",
+  "author": {
+    "name": "nirholas"
+  },
+  "repository": "https://github.com/nirholas/techdollar",
+  "keywords": [
+    "techdollar",
+    "cdp",
+    "robinhood-chain",
+    "tokenized-assets",
+    "liquidation"
+  ]
+}
