@@ -1,0 +1,19 @@
+{
+  "name": "techdollar",
+  "owner": {
+    "name": "nirholas"
+  },
+  "description": "SDK and report-only keeper for TECHDOLLAR positions, halts and liquidation auctions on Robinhood Chain.",
+  "plugins": [
+    {
+      "name": "techdollar",
+      "source": "./",
+      "description": "SDK and report-only keeper for TECHDOLLAR positions, halts and liquidation auctions on Robinhood Chain.",
+      "tags": [
+        "cdp",
+        "robinhood-chain",
+        "sdk"
+      ]
+    }
+  ]
+}
